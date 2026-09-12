@@ -1,0 +1,24 @@
+# Copy these fields between --- delimiter lines at the top of a Markdown report.
+# Replace placeholders with source-supported information; do not invent metadata.
+name: model-descriptive-issue-DDMMYYYY
+title: Descriptive title of the failure
+type: report
+version: unknown
+status: unknown
+description: A concise description of the issue covered by this report.
+contributors:
+  - name: unknown
+    type: ai
+    model: unknown
+    role: original-author
+created: unknown
+updated: unknown
+tags:
+  - ai
+  - report
+requires: []
+provides:
+  - model-descriptive-issue-DDMMYYYY
+applies_to:
+  - aifups
+authorship_note: Replace with the basis for the original model attribution.
