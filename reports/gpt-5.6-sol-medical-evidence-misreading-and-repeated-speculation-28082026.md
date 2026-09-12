@@ -28,7 +28,7 @@ privacy_edits:
   - Payment information removed
 ---
 
-# FORENSIC SELF-AUDIT: Critical Review of GPT-5.6 Sol’s Failures in Reviewing ksouth’s Medical Evidence
+# FORENSIC SELF-AUDIT: Critical Review of GPT-5.6 Sol’s Failures in Reviewing [ksouth](https://github.com/ksouth)’s Medical Evidence
 
 Conversation date: 28 August 2026\
 Model: OpenAI ChatGPT — GPT-5.6 Sol\

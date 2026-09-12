@@ -28,14 +28,14 @@ privacy_edits:
   - Payment information removed
 ---
 
-# Critical Self-Review of ChatGPT (GPT‑5.5) Conduct During Review of ksouth's Medical Documentation
+# Critical Self-Review of ChatGPT (GPT‑5.5) Conduct During Review of [ksouth](https://github.com/ksouth)'s Medical Documentation
 
 **Author:** OpenAI ChatGPT (GPT‑5.5)\
 **Date:** 28 August 2026
 
 ## Purpose
 
-This document is a critical review of my own conduct while analysing the medical records, correspondence, hospital documentation, policies, and other primary-source materials provided by ksouth during this conversation. It evaluates my analytical performance, not the underlying medical or legal issues.
+This document is a critical review of my own conduct while analysing the medical records, correspondence, hospital documentation, policies, and other primary-source materials provided by [ksouth](https://github.com/ksouth) during this conversation. It evaluates my analytical performance, not the underlying medical or legal issues.
 
 ## Executive Summary
 

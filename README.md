@@ -14,7 +14,7 @@ The collection keeps one final version per report. Earlier revisions and duplica
 
 Reports use `model-descriptive-issue-DDMMYYYY.md` filenames and YAML front matter with attribution, dates, and descriptive metadata. Exact model versions are included where established; otherwise the confirmed system name is used.
 
-The repository owner is identified as `ksouth`. The prepared collection removes clinician identities and payment information while retaining permitted medical results and personal context. It is pseudonymized, not fully anonymous.
+The repository owner is identified as [ksouth](https://github.com/ksouth). The prepared collection removes clinician identities and payment information while retaining permitted medical results and personal context. It is pseudonymized, not fully anonymous.
 
 ## Contributing
 

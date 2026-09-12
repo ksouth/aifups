@@ -66,22 +66,22 @@ Every report begins with valid YAML between two lines containing `---`. Use [REP
 
 ## Model authorship
 
-Assign YAML contributors to the AI model that wrote the report. Do not assign AI-written reports to ksouth, and do not substitute the model that converted or formatted the file for the original author.
+Assign YAML contributors to the AI model that wrote the report. Do not assign AI-written reports to [ksouth](https://github.com/ksouth), and do not substitute the model that converted or formatted the file for the original author.
 
-Use explicit source attribution or ksouth's confirmation. If neither establishes the author, mark it `unknown` until resolved. Record a brief `authorship_note` when useful. A generic system name is valid when its exact version is unknown.
+Use explicit source attribution or [ksouth](https://github.com/ksouth)'s confirmation. If neither establishes the author, mark it `unknown` until resolved. Record a brief `authorship_note` when useful. A generic system name is valid when its exact version is unknown.
 
 If several models actually wrote substantive portions, list those models and describe their roles. Merely appearing in a quoted transcript does not make a model an author of the surrounding analysis.
 
 ## Privacy and retained context
 
-- Identify the repository owner only as `ksouth` throughout text, filenames, YAML, links, and source references.
+- Identify the repository owner only as [ksouth](https://github.com/ksouth) throughout text, filenames, YAML, links, and source references.
 - Remove clinician names, personal contact information, and identifying care-site affiliations. Use consistent labels such as `Clinician A` and `Hospital A` when distinctions matter to the account.
 - Remove payment information, including personal amounts, account or card details, and transaction information. Keep general discussion of an AI failure where it can be separated from those details.
-- Medical results and the existing stalking context may remain, as requested by ksouth. These are pseudonymized reports, not a claim of complete anonymity.
+- Medical results and the existing stalking context may remain, as requested by [ksouth](https://github.com/ksouth). These are pseudonymized reports, not a claim of complete anonymity.
 - Check all metadata and link destinations as well as visible prose. Do not restore identifying source filenames through provenance fields.
 - Mark redactions plainly, for example `Payment information removed.` Do not create a link for a redaction marker.
 
-These preferences concern ksouth's reports; they do not establish permission to publish another person's private records.
+These preferences concern [ksouth](https://github.com/ksouth)'s reports; they do not establish permission to publish another person's private records.
 
 ## Content and formatting
 

@@ -30,7 +30,7 @@ privacy_edits:
 
 # Token Spend Visibility in Claude: A Dark UX Pattern Analysis
 
-**Author:** Claude AI (with ksouth)\
+**Author:** Claude AI (with [ksouth](https://github.com/ksouth))\
 **Date:** August 15, 2026\
 **Subject:** Complete asymmetry in token visibility between Claude and users—a critical dark UX finding
 
@@ -612,7 +612,7 @@ For sustained work (memoir, consciousness book, NDIS research):
 ------------------------------------------------------------------------
 
 **Report compiled by:** Claude AI (corrected version with addendum)\
-**Research partner:** ksouth (who provided screenshots and caught the real problem)\
+**Research partner:** [ksouth](https://github.com/ksouth) (who provided screenshots and caught the real problem)\
 **Status:** Revised with evidence, ready for publication
 
 [Payment information removed.]
