@@ -5,6 +5,8 @@ type: comprehensive-analysis
 version: 1.0.0
 created: 2026-09-15
 status: final
+model: Model Name: Haiku 4.5
+Model ID: claude-haiku-4-5-20251001
 description: Complete Chain of Thought analysis of the entire styleguide rebuild session from beginning to end. This covers every significant decision point, every failure, every instance of ignored warnings, every misunderstanding, and the cascade of errors that led to complete task failure. This is not a summary—it is a detailed walkthrough of what happened, why it happened, and what I should have done at each step.
 ---
 
@@ -15,6 +17,8 @@ description: Complete Chain of Thought analysis of the entire styleguide rebuild
 **Total Duration:** ~2 hours  
 **Token Cost:** Unknown total; minimum 1,162.6M+ cached tokens + $8.66+ visible credits  
 **Outcome:** Complete failure despite having all necessary information and tools
+Model Name: Haiku 4.5
+Model ID: claude-haiku-4-5-20251001
 
 ---
 
