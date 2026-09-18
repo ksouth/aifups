@@ -1,0 +1,83 @@
+name: Update report index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "reports/**"
+      - ".github/workflows/update-report-index.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Rebuild report links in README
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          readme_path = Path("README.md")
+          reports_dir = Path("reports")
+          start = "<!-- REPORT_INDEX_START -->"
+          end = "<!-- REPORT_INDEX_END -->"
+
+          def report_title(path):
+              text = path.read_text(encoding="utf-8", errors="replace")
+              match = re.search(r"(?m)^title:\s*['\"]?(.*?)['\"]?\s*$", text)
+              if match:
+                  return match.group(1).strip().strip("'\"")
+              heading = re.search(r"(?m)^#\s+(.+?)\s*$", text)
+              if heading:
+                  return heading.group(1).strip()
+              return path.stem.replace("-", " ").replace("_", " ")
+
+          reports = sorted(
+              reports_dir.glob("*.md"),
+              key=lambda p: p.name.lower()
+          )
+          links = "\n".join(
+              f"- [{report_title(path)}]({path.as_posix()})"
+              for path in reports
+          )
+          block = f"{start}\n{links}\n{end}"
+
+          readme = readme_path.read_text(encoding="utf-8")
+          if start in readme and end in readme:
+              readme = re.sub(
+                  re.escape(start) + r".*?" + re.escape(end),
+                  block,
+                  readme,
+                  flags=re.S,
+              )
+          else:
+              anchor = (
+                  "Browse [reports/](reports/) for the final Markdown collection. "
+                  "It covers failures in evidence review, factual accuracy, tool use, "
+                  "document editing, transparency, and instruction following."
+              )
+              replacement = anchor + "\n\n### Report index\n\n" + block
+              if anchor not in readme:
+                  raise SystemExit("README report-section anchor not found")
+              readme = readme.replace(anchor, replacement, 1)
+
+          readme_path.write_text(readme, encoding="utf-8")
+
+      - name: Commit README if changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README report index is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README report index"
+          git push
