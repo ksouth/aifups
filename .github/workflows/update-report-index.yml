@@ -29,25 +29,97 @@ jobs:
           start = "<!-- REPORT_INDEX_START -->"
           end = "<!-- REPORT_INDEX_END -->"
 
+          def read_text(path):
+              return path.read_text(encoding="utf-8", errors="replace")
+
+          def frontmatter_value(text, key):
+              if not text.startswith("---"):
+                  return None
+              parts = text.split("---", 2)
+              if len(parts) < 3:
+                  return None
+              match = re.search(
+                  rf"(?m)^{re.escape(key)}:\s*['\"]?(.*?)['\"]?\s*$",
+                  parts[1],
+              )
+              return match.group(1).strip().strip("'\"") if match else None
+
           def report_title(path):
-              text = path.read_text(encoding="utf-8", errors="replace")
-              match = re.search(r"(?m)^title:\s*['\"]?(.*?)['\"]?\s*$", text)
-              if match:
-                  return match.group(1).strip().strip("'\"")
+              text = read_text(path)
+              title = frontmatter_value(text, "title")
+              if title:
+                  return title
               heading = re.search(r"(?m)^#\s+(.+?)\s*$", text)
               if heading:
                   return heading.group(1).strip()
               return path.stem.replace("-", " ").replace("_", " ")
 
-          reports = sorted(
-              reports_dir.glob("*.md"),
-              key=lambda p: p.name.lower()
-          )
-          links = "\n".join(
-              f"- [{report_title(path)}]({path.as_posix()})"
-              for path in reports
-          )
-          block = f"{start}\n{links}\n{end}"
+          def report_model(path):
+              text = read_text(path)
+              model = frontmatter_value(text, "model")
+              if not model:
+                  contributor_model = re.search(
+                      r"(?ms)^contributors:\s*\n.*?^\s+model:\s*['\"]?(.*?)['\"]?\s*$",
+                      text,
+                  )
+                  if contributor_model:
+                      model = contributor_model.group(1).strip().strip("'\"")
+
+              # Normalize known families while preserving specific model variants.
+              if model and model.lower() not in {"unknown", "chatgpt", "claude", "gemini"}:
+                  return model
+
+              name = path.name.lower()
+              if name.startswith("gpt-5.6-luna-light"):
+                  return "GPT-5.6 Luna Light"
+              if name.startswith("gpt-5.6-sol"):
+                  return "GPT-5.6 Sol"
+              if name.startswith("gpt-5.5"):
+                  return "GPT-5.5"
+              if name.startswith("chatgpt"):
+                  return "ChatGPT"
+              if name.startswith("claude"):
+                  return "Claude"
+              if name.startswith("gemini"):
+                  return "Gemini"
+
+              # Reports with legacy/date-first filenames: use explicit body metadata if present.
+              body_model = re.search(
+                  r"(?mi)^\s*(?:\*\*)?model(?: used for this report and the failed work)?(?:\*\*)?\s*:\s*(.+?)\s*$",
+                  text,
+              )
+              if body_model:
+                  return body_model.group(1).strip().strip("*").strip()
+
+              return model or "Unspecified model"
+
+          reports = sorted(reports_dir.glob("*.md"), key=lambda p: p.name.lower())
+          groups = {}
+          for path in reports:
+              groups.setdefault(report_model(path), []).append(path)
+
+          preferred = [
+              "GPT-5.6 Sol",
+              "GPT-5.6 Luna Light",
+              "GPT-5.5",
+              "ChatGPT",
+              "Claude Haiku 4.5",
+              "Claude",
+              "Gemini",
+              "Unspecified model",
+          ]
+          rank = {name: i for i, name in enumerate(preferred)}
+          group_names = sorted(groups, key=lambda n: (rank.get(n, len(rank)), n.lower()))
+
+          sections = []
+          for model in group_names:
+              links = "\n".join(
+                  f"- [{report_title(path)}]({path.as_posix()})"
+                  for path in sorted(groups[model], key=lambda p: (report_title(p).lower(), p.name.lower()))
+              )
+              sections.append(f"#### {model}\n\n{links}")
+
+          block = f"{start}\n" + "\n\n".join(sections) + f"\n{end}"
 
           readme = readme_path.read_text(encoding="utf-8")
           if start in readme and end in readme:
