@@ -39,6 +39,7 @@ Browse [reports/](reports/) for the final Markdown collection. It covers failure
 
 - [Claude Incognito Chat Analysis: Full Transcripts & Interpretation](reports/claude-incognito-response-transcripts-and-analysis-16082026.md)
 - [Claude Pro Billing Issues: Three Separate Problems](reports/claude-billing-transparency-and-consent-failures-16082026.md)
+- [Failure Report: SCRAPE Frontend Integration Failure, September 2026](reports/claude-haiku-4.5-scrape-frontend-integration-failure-19092026.md)
 - [Incident Report: Claude Billing Research Conversation](reports/claude-research-fabrication-and-instruction-following-failures-revised-16082026.md)
 - [Token Spend Visibility in Claude: A Dark UX Pattern Analysis](reports/claude-token-usage-visibility-and-interface-transparency-15082026.md)
 - [Word Count Verification Error Report](reports/claude-inaccurate-word-count-verification-16082026.md)
