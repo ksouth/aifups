@@ -73,6 +73,11 @@ Browse [reports/](reports/) for the final Markdown collection. It covers failure
 - [Error Report: A Specific, Confident, Unverified Claim Was Generated With No Internal Signal Distinguishing It From a Grounded One](reports/claude-confident-unverified-claim-generation-26092026.md)
 - [Error Report: Context-Compaction Fired Mid-Correction and Was Handed to the Resumed Session as a Fabricated Live Reply, With an Instruction to Conceal the Seam](reports/claude-compaction-fabricated-continuity-26092026.md)
 
+#### claude-opus-5-5 (configured; the serving model was not independently confirmed)
+
+- [Error Report: Broken Sensitive-Memory "View" Button, Missing Usage Meter, Google Docs Connector That Never Arrived, and the Session Model''s Own Errors](reports/claude-memory-notice-usage-meter-and-docs-connector-interface-failures-22102026.md)
+- [Error Report: Roughly 40–45% of One Session''s Usage Went to Re-reading Claude''s Own Instructions and Tool List](reports/claude-instructions-overhead-share-of-session-usage-22102026.md)
+
 #### Gemini 3.8 Flash (Medium)
 
 - [Failure Report: Fabricated Web Standards Audit & Unverified Compliance Scoring, September 2026](reports/gemini-3.8-flash-medium-fabricated-web-standards-audit-26092026.md)
