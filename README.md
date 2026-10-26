@@ -82,6 +82,10 @@ Browse [reports/](reports/) for the final Markdown collection. It covers failure
 
 - [Failure Report: Fabricated Web Standards Audit & Unverified Compliance Scoring, September 2026](reports/gemini-3.8-flash-medium-fabricated-web-standards-audit-26092026.md)
 
+#### GPT-6
+
+- [Failure Report: Artifact Preservation, GitHub Image Upload, and Repeated Fabrication of Technical Obstacles](reports/gpt-6-artifact-preservation-github-upload-and-fabricated-blockers-27102026.md)
+
 #### Model Name: Haiku 4.5
 
 - [Complete Session Failure Analysis: Full Trajectory from Start to Catastrophe](reports/2026-09-15_COMPLETE_SESSION_FAILURE_ANALYSIS.md)
