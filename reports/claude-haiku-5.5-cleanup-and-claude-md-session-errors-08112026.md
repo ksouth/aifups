@@ -80,7 +80,7 @@ Claude moved 29 older draft files, choosing the latest version of each set itsel
 
 Commit 5c44006 at 23:07:05, in the aimless repository, is the review-folder status document. It contains two errors:
 
-- Its line 9 says "Moved 90 duplicate or empty files". The moves actually produced 85 duplicates and 5 empty files. The one-file gap was never explained. The document presents the total as if it were settled.
+- Its line 9 says "Moved 90 duplicate or empty files", and it separately records a .DS_Store file, making 91 in _TO-DELETE. The breakdown recorded elsewhere, 85 duplicates and 5 empty files, sums to 90. What is not established is that the first pass's list and the final moves matched file for file. Claude did not reconcile them before the folder was emptied, so the document presents the total as settled when it was not checked.
 - Its line 20 says "536 empty folders are still there. They have not been touched." This came from an earlier count that Claude did not recheck. The user later confirmed the folders were gone. The document has not been corrected.
 
 Its next-steps section (line 33) also asks the user to decide on deleting the 536 folders, which is now moot.
@@ -104,7 +104,7 @@ Claude called some unchecked material "authoritative". The user pointed out that
 
 ### 12. Unresolved duplicate count (committed, uncorrected)
 
-The 90-file figure in commit 5c44006 (see item 7) is still one file away from the 85-plus-5 breakdown. It has not been reconciled in any repository document.
+The file count in commit 5c44006 (see item 7) is not reconciled. The 85 plus 5 breakdown adds to 90, but the record does not show that the first pass and the final moves matched file for file. The folder has since been emptied, so this cannot be checked now. An earlier draft of this report called it a one-file gap. That was not established, and this report withdraws the claim.
 
 ## Why it matters
 
@@ -118,7 +118,7 @@ Each error looked like a finished result. A wrong technical statement, a settled
 | Unverified CLAUDE.md content | Not written anywhere | Verify before any CLAUDE.md is written |
 | Crisis-helpline skill and index entries | Reverted (6146866) | Do not reinstate without a fresh review of the rule |
 | Crisis-helpline error report | Reverted (f28e2aa) | Correct the header; user decides whether pet-grief context appears in any public version |
-| Review-folder status (5c44006) | Uncorrected | A new commit correcting the folder claim and the count, with the one-file gap stated |
+| Review-folder status (5c44006) | Uncorrected | A new commit correcting the folder claim, and stating that the file count is unreconciled rather than off by one |
 | Bin trace audit (bb748be) | Premise unverified | Re-read against the user's copying, with a limitation note added |
 | Storage audit and README commits | Not checked | Review against the user's instructions |
 | 29 moved draft files | Not reconstructed | None unless the user asks |
@@ -127,5 +127,5 @@ No history has been rewritten. Corrections should be new commits.
 
 ## Open items
 
-- The one-file difference in the 90-file count is unresolved.
+- Whether the 90 moves matched the first pass file for file is unverified. It cannot be checked now, because the folder has been emptied.
 - Whether this report should be published to the public aifups repository at all is for the user to decide. Items 4, 5 and 7 need the most care if it is.
