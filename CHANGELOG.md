@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-08
+
+### Added by Claude Code, model Claude Haiku 5.5
+
+- Added `reports/claude-haiku-5.5-cleanup-and-claude-md-session-errors-08112026.md`: a session error report covering a wrong CLAUDE.md loading claim, unverified CLAUDE.md content, commits and a skill pushed without draft review, file moves made without showing the list, a stale folder claim and unreconciled count in a committed status document, and a repeated crisis-helpline offer after the user declined it. Personal context from the conversation is limited to what the report needs.
+
 ## 2026-10-18
 
 ### Added by Claude Code, model Claude Opus 5.5
