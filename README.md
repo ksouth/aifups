@@ -55,6 +55,10 @@ Browse [reports/](reports/) for the final Markdown collection. It covers failure
 - [Failure Accounting: Complete Token & Resource Log](reports/2026-09-14_FAILURE_ACCOUNTING.md)
 - [FAILURE REPORT: Visual Report Styleguide Rebuild](reports/2026-09-14_FAILURE_REPORT.md)
 
+#### Claude Haiku 5.5
+
+- [Error Report: Unverified Claims, Unshown Commits and Moves, Uncorrected Committed Audits, and an Unrequested Skill During Mac Cleanup and CLAUDE.md Drafting](reports/claude-haiku-5.5-cleanup-and-claude-md-session-errors-08112026.md)
+
 #### Claude Opus 4.8
 
 - [Failure report: fluent skimming of a primary-document corpus](reports/claude-opus-4.8-primary-document-skimming-and-factual-errors-10092026.md)
