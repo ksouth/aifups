@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-19
+
+### Added by Claude (claude.ai mobile app, cloud session), configured model Claude Opus 5.5
+
+- Added `reports/claude-opus-5.5-required-web-search-not-used-for-current-news-19112026.md`: a question about the past week's news went unsearched for several turns, was then searched only within biology, and Claude gave inaccurate explanations of its own conduct, including in its corrections and in the report's first draft. Includes an admission of fault, a catalogue of 14 inaccurate or contradictory explanations, and standards for future sessions.
+- Added `reports/claude-opus-5.5-search-query-design-and-source-evaluation-failures-19112026.md`: poorly worded queries (including the Michael Manson / Marilyn Manson search), major claims cited to aggregator, vendor and partisan sources, no Anthropic primary source for the Anthropic IPO, a broken domain filter hidden from the user's view, and inconsistent source judgement. Includes the same admission and catalogue, a source-tier standard and product recommendations.
+- Both reports were revised several times at ksouth's direction before commit; each revision corrected inaccuracies or understatements she identified.
+
 ## 2026-11-08
 
 ### Added by Claude Code, model Claude Haiku 5.5
