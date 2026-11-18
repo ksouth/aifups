@@ -79,7 +79,9 @@ Browse [reports/](reports/) for the final Markdown collection. It covers failure
 
 #### claude-opus-5-5 (configured; the serving model was not independently confirmed)
 
+- [Error Report: A Question About "This Week''s News" Was Answered Without Searching, Then Searched Too Narrowly, Then Misdescribed](reports/claude-opus-5.5-required-web-search-not-used-for-current-news-19112026.md)
 - [Error Report: Broken Sensitive-Memory "View" Button, Missing Usage Meter, Google Docs Connector That Never Arrived, and the Session Model''s Own Errors](reports/claude-memory-notice-usage-meter-and-docs-connector-interface-failures-22102026.md)
+- [Error Report: Poorly Worded Search Queries, Aggregator and Vendor Sources Cited as Fact, and No Primary Sources for a Story With a Public SEC Filing](reports/claude-opus-5.5-search-query-design-and-source-evaluation-failures-19112026.md)
 - [Error Report: Roughly 40–45% of One Session''s Usage Went to Re-reading Claude''s Own Instructions and Tool List](reports/claude-instructions-overhead-share-of-session-usage-22102026.md)
 
 #### Gemini 3.8 Flash (Medium)
