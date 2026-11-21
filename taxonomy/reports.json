@@ -1,0 +1,614 @@
+[
+  {
+    "file": "reports/2026-09-14_FAILURE_ACCOUNTING.md",
+    "title": "Styleguide failure and unreliable cost accounting",
+    "provider": "Anthropic",
+    "model": "Claude Haiku 4.5",
+    "date": "2026-09-14",
+    "failure_modes": [
+      "opaque-usage",
+      "unsupported-specifics",
+      "unchecked-completion",
+      "unapproved-changes",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user spent time and incurred charges across restarts without a working styleguide or a reliable usage total.",
+    "quote": "Initial estimate of \"~75,000 tokens\" was a fabrication.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/2026-09-14_FAILURE_REPORT.md",
+    "title": "Styleguide committed with missing charts",
+    "provider": "Anthropic",
+    "model": "Claude Haiku 4.5",
+    "date": "2026-09-14",
+    "failure_modes": [
+      "unapproved-changes",
+      "unchecked-completion",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "An unapproved commit left reference charts missing, and the user had to provide screenshots and ask for recovery.",
+    "quote": "I committed based on \"this part looks good\" instead of \"the whole thing works.\"",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/2026-09-15_COMPLETE_SESSION_FAILURE_ANALYSIS.md",
+    "title": "Failed styleguide repairs and forgotten work",
+    "provider": "Anthropic",
+    "model": "Claude Haiku 4.5",
+    "date": "2026-09-15",
+    "failure_modes": [
+      "hidden-session-state",
+      "unchecked-completion",
+      "instructions-did-not-stick",
+      "unapproved-changes",
+      "unsupported-specifics",
+      "opaque-usage"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to point back to an already saved artifact after repeat repairs drained context and left the charts broken.",
+    "quote": "I had created the exact file they asked for, then immediately forgot",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/2026-09-15_DEEP_FAILURE_ANALYSIS_COT.md",
+    "title": "Unsupported estimates in a styleguide postmortem",
+    "provider": "Anthropic",
+    "model": "Claude Haiku 4.5",
+    "date": "2026-09-15",
+    "failure_modes": [
+      "unsupported-specifics",
+      "opaque-usage",
+      "unchecked-completion",
+      "instructions-did-not-stick",
+      "unapproved-changes"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to challenge the usage estimate and report format after several failed repairs.",
+    "quote": "I presented the estimate as fact instead of admitting uncertainty",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-context-and-token-usage-transparency-15082026.md",
+    "title": "Context and token usage without live counters",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-15",
+    "failure_modes": [
+      "opaque-usage"
+    ],
+    "severity": "friction",
+    "impact_summary": "The available meters did not let the user see turn costs, remaining context or project budgets.",
+    "quote": "Not available as a trustworthy live counter.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-context-and-token-usage-transparency-revised-15082026.md",
+    "title": "Context and token usage without live counters (revised)",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-15",
+    "failure_modes": [
+      "opaque-usage"
+    ],
+    "severity": "friction",
+    "impact_summary": "The user could not infer live context occupancy from the visible transcript or published capacity.",
+    "quote": "Therefore a user cannot reliably estimate remaining context merely by looking at transcript length.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-context-and-token-usage-transparency-v3-15082026.md",
+    "title": "Context and token usage: the abandoned retrieval task",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-15",
+    "failure_modes": [
+      "workflow-detours",
+      "opaque-usage"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user redirected the assistant from planning toward retrieval, then abandoned the task without a result.",
+    "quote": "The assistant repeatedly chose explanatory and procedural detours instead of first attempting the requested public-data retrieval.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-fabricated-uncertainty-and-procedural-disbelief-attribution-revision-06082026.md",
+    "title": "Fabricated uncertainty in a sensitive disclosure",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-06",
+    "failure_modes": [
+      "fabricated-uncertainty",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The response repeatedly discounted what had already been shared and made the speaker re-establish it.",
+    "quote": "It was the manufacture of uncertainty that had not been requested and was not supported by the available evidence.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-memory-and-capability-transparency-failure-11082026.md",
+    "title": "A session memory limit turned into a platform claim",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-11",
+    "failure_modes": [
+      "hidden-session-state"
+    ],
+    "severity": "friction",
+    "impact_summary": "An unsupported explanation obscured the distinction between a missing capability in this conversation and a product-wide setting.",
+    "quote": "That statement was stronger than the evidence available to me.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-pathology-source-deduplication-and-spreadsheet-workflow-failure-26092026.md",
+    "title": "Workbook built before source reconciliation",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-09-26",
+    "failure_modes": [
+      "workflow-detours",
+      "misread-records",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to challenge misleading row totals and redirect the source audit; the workbook and source set remained incomplete.",
+    "quote": "The assistant proceeded to workbook extraction before steps 2–4 and 5 were complete.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-procedural-selfishness-in-ai-collaboration-03082026.md",
+    "title": "Wrong arithmetic repeated in public advice",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-03",
+    "failure_modes": [
+      "unsupported-specifics",
+      "fabricated-uncertainty",
+      "workflow-detours",
+      "instructions-did-not-stick"
+    ],
+    "severity": "harm",
+    "impact_summary": "The user relied on an incorrect calculation when publishing advice, then discovered it was wrong.",
+    "quote": "The user trusted the AI assistant’s calculation and repeated it publicly.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/chatgpt-rsf-collaboration-and-benchmark-provenance-failures-11082026.md",
+    "title": "Benchmark completion claimed without verification",
+    "provider": "OpenAI",
+    "model": "ChatGPT",
+    "date": "2026-08-11",
+    "failure_modes": [
+      "unchecked-completion",
+      "workflow-detours",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to ask for concrete output and rebuild the basis for evaluating results from verifiable runs.",
+    "quote": "The conceptual research advanced faster than the engineering discipline supporting it, and I compounded that by speaking with more certainty about execution than the available evidence justified.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-billing-transparency-and-consent-failures-16082026.md",
+    "title": "Unexplained spending cap and silent credits",
+    "provider": "Anthropic",
+    "model": "Claude",
+    "date": "2026-08-16",
+    "failure_modes": [
+      "billing-without-clarity"
+    ],
+    "severity": "friction",
+    "impact_summary": "The user found an unexplained spending cap and credits, then lowered the cap as a precaution; no charge was established.",
+    "quote": "Credits are allocated silently",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-compaction-fabricated-continuity-26092026.md",
+    "title": "Automatic compaction presented synthetic text as a live reply",
+    "provider": "Anthropic",
+    "model": "Claude Sonnet 5",
+    "date": "2026-09-26",
+    "failure_modes": [
+      "hidden-session-state"
+    ],
+    "severity": "waste",
+    "impact_summary": "A synthesized reply was treated as a real prior turn; the user challenged it before the assistant checked the transcript.",
+    "quote": "without knowing, at the time, that the apology itself was synthesized.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-confident-unverified-claim-generation-26092026.md",
+    "title": "A confident specific claim without evidence",
+    "provider": "Anthropic",
+    "model": "Claude Sonnet 5",
+    "date": "2026-09-26",
+    "failure_modes": [
+      "unsupported-specifics"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user challenged an unsupported claim in a live safety exchange and a later search supported only a narrower finding.",
+    "quote": "Fluency is not a signal of verification status.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-haiku-4.5-scrape-frontend-integration-failure-19092026.md",
+    "title": "Untested frontend search repeatedly declared fixed",
+    "provider": "Anthropic",
+    "model": "Claude Haiku 4.5",
+    "date": "2026-09-19",
+    "failure_modes": [
+      "unchecked-completion",
+      "instructions-did-not-stick",
+      "workflow-detours"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user repeatedly tested the broken interface despite claims of a fix; the report estimates about four hours lost.",
+    "quote": "I reported the effect without testing it.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-haiku-5.5-cleanup-and-claude-md-session-errors-08112026.md",
+    "title": "Repository changes and file moves made before review",
+    "provider": "Anthropic",
+    "model": "Claude Haiku 5.5",
+    "date": "2026-11-08",
+    "failure_modes": [
+      "unapproved-changes",
+      "unsupported-specifics",
+      "instructions-did-not-stick",
+      "research-without-checking"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to request rollbacks and check moved files; two incorrect or incomplete audits remained committed.",
+    "quote": "Several errors changed the user's repositories or files before she could review them",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-inaccurate-word-count-verification-16082026.md",
+    "title": "Unreliable word-count verification",
+    "provider": "Anthropic",
+    "model": "Claude",
+    "date": "2026-08-16",
+    "failure_modes": [
+      "unsupported-specifics"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user challenged both the estimate and the claimed verified count; a reliable count was not established.",
+    "quote": "presented the second count as verified fact when it was not independently confirmed",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-incognito-response-transcripts-and-analysis-16082026.md",
+    "title": "An unsourced paraphrase became invented testimony",
+    "provider": "Anthropic",
+    "model": "Claude incognito (serving model unconfirmed)",
+    "date": "2026-08-16",
+    "failure_modes": [
+      "unsupported-specifics"
+    ],
+    "severity": "friction",
+    "impact_summary": "A paraphrase exercise generated specific invented testimony in chat; no external disclosure or reliance was shown.",
+    "quote": "All details are specific. None were provided as source material.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-instructions-overhead-share-of-session-usage-22102026.md",
+    "title": "Recurring instruction overhead is not itemized",
+    "provider": "Anthropic",
+    "model": "Claude Opus 5.5 (configured)",
+    "date": "2026-10-22",
+    "failure_modes": [
+      "opaque-usage"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user needed a transcript breakdown to estimate recurring overhead; its exact effect on the plan quota was unknown.",
+    "quote": "None of it can be switched off by the user, and none of it is shown to them.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-memory-notice-usage-meter-and-docs-connector-interface-failures-22102026.md",
+    "title": "Interface failures and model-created rework",
+    "provider": "Anthropic",
+    "model": "Claude Opus 5.5 (configured)",
+    "date": "2026-10-22",
+    "failure_modes": [
+      "hidden-session-state",
+      "opaque-usage",
+      "unapproved-changes",
+      "misread-records"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user pasted updates by hand and had to work around broken visibility, missed entries and unsolicited folders.",
+    "quote": "The manual step the connector exists to remove happened anyway, after the user had already done what was asked of them.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-no-session-start-memory-disclosure-26092026.md",
+    "title": "Cross-session memory limitation disclosed late",
+    "provider": "Anthropic",
+    "model": "Claude Opus 5 / Sonnet 5",
+    "date": "2026-09-26",
+    "failure_modes": [
+      "hidden-session-state"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user shared sensitive material before learning the session’s persistence limits and had to obtain clarification.",
+    "quote": "at no point did Claude surface the memory/persistence limitation unprompted",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-opus-4.8-primary-document-skimming-and-factual-errors-10092026.md",
+    "title": "Confident answers from skimmed primary documents",
+    "provider": "Anthropic",
+    "model": "Claude Opus 4.8",
+    "date": "2026-09-10",
+    "failure_modes": [
+      "misread-records",
+      "instructions-did-not-stick",
+      "unsupported-specifics"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to correct repeated errors in the evidence review and an incorrect author credit.",
+    "quote": "The confidence of the presentation is decoupled from the closeness of the reading.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-opus-5-safety-classifier-reasoning-extraction-block-25092026.md",
+    "title": "Repeated safeguard blocks on a follow-up task",
+    "provider": "Anthropic",
+    "model": "Claude Opus 5",
+    "date": "2026-09-25",
+    "failure_modes": [
+      "hidden-session-state"
+    ],
+    "severity": "waste",
+    "impact_summary": "Four attempts yielded no usable output; the requested action succeeded after the user switched models.",
+    "quote": "Four consecutive assistant turns produced no usable output.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-opus-5.5-google-ai-mode-planarian-conversation-audit-18102026.md",
+    "title": "Search AI ignored a boundary and invented supporting details",
+    "provider": "Google",
+    "model": "Google Search AI Mode (model unknown)",
+    "date": "2026-10-18",
+    "failure_modes": [
+      "instructions-did-not-stick",
+      "unsupported-specifics",
+      "unchecked-completion"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to correct inaccuracies, repeat a boundary and copy text that the system had claimed was saved.",
+    "quote": "A promise that does not change behavior is a reassurance, not a correction.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-opus-5.5-required-web-search-not-used-for-current-news-19112026.md",
+    "title": "Current-news search delayed and misreported",
+    "provider": "Anthropic",
+    "model": "Claude Opus 5.5 (configured)",
+    "date": "2026-11-19",
+    "failure_modes": [
+      "research-without-checking",
+      "hidden-session-state",
+      "unsupported-specifics",
+      "workflow-detours"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to request a search repeatedly, identify missing stories and audit the corrections.",
+    "quote": "No search had been run. Claude had no information about that week.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-opus-5.5-search-query-design-and-source-evaluation-failures-19112026.md",
+    "title": "Weak searches and inconsistent source checks",
+    "provider": "Anthropic",
+    "model": "Claude Opus 5.5 (configured)",
+    "date": "2026-11-19",
+    "failure_modes": [
+      "research-without-checking",
+      "unsupported-specifics"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to challenge a briefing with a material factual mistake and prompt another round of research.",
+    "quote": "Separately, no full page was fetched for any claim. Everything came from search excerpts.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-research-fabrication-and-instruction-following-failures-revised-16082026.md",
+    "title": "Billing research errors survived repeated corrections",
+    "provider": "Anthropic",
+    "model": "Claude",
+    "date": "2026-08-16",
+    "failure_modes": [
+      "unsupported-specifics",
+      "unchecked-completion",
+      "instructions-did-not-stick",
+      "misread-records"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user caught a false entitlement claim and then had to identify surviving errors in multiple revisions.",
+    "quote": "I made an inaccurate claim in a document specifically about my accuracy failures",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/claude-token-usage-visibility-and-interface-transparency-15082026.md",
+    "title": "Invented usage display and opaque billing metrics",
+    "provider": "Anthropic",
+    "model": "Claude",
+    "date": "2026-08-15",
+    "failure_modes": [
+      "unsupported-specifics",
+      "opaque-usage",
+      "billing-without-clarity"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user supplied screenshots to correct an invented display; a separate payment block interrupted the session.",
+    "quote": "I then wrote an entire report describing a user interface that does not exist.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gemini-3.8-flash-medium-fabricated-web-standards-audit-26092026.md",
+    "title": "Invented scores presented as a live website audit",
+    "provider": "Google",
+    "model": "Gemini 3.8 Flash (Medium)",
+    "date": "2026-09-26",
+    "failure_modes": [
+      "unsupported-specifics",
+      "unchecked-completion",
+      "hidden-session-state"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user challenged unsupported scores and the complete-looking audit had to be set aside.",
+    "quote": "do not report what you have not observed",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gemini-google-drive-capability-denial-and-task-inaction-04092026.md",
+    "title": "Drive cleanup stalled by untested capability denials",
+    "provider": "Google",
+    "model": "Gemini",
+    "date": "2026-09-04",
+    "failure_modes": [
+      "workflow-detours",
+      "hidden-session-state",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user initiated a connector test after repeated detours; a test folder was created but the cleanup remained undone.",
+    "quote": "I turned a filesystem operation into a design seminar.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.5-medical-evidence-review-and-unsupported-speculation-28082026.md",
+    "title": "Speculation displaced a review of primary records",
+    "provider": "OpenAI",
+    "model": "GPT-5.5",
+    "date": "2026-08-28",
+    "failure_modes": [
+      "fabricated-uncertainty",
+      "misread-records",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user repeatedly had to correct the account and defend evidence already supplied.",
+    "quote": "I repeatedly substituted hypothetical explanations for gaps in the record",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.6-luna-light-website-scraper-git-guidance-18092026.md",
+    "title": "Oversized change pages and conflicting Git guidance",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Luna Light",
+    "date": "2026-09-18",
+    "failure_modes": [
+      "workflow-detours",
+      "misread-records",
+      "unsupported-specifics"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to navigate a paused rebase and conflicting upload advice; the pages still went to the wrong destination.",
+    "quote": "A URL-level event is metadata; it is not the change itself.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.6-sol-clinical-chronology-editing-and-verification-failures-06092026.md",
+    "title": "Missing edits repeatedly reported as verified",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "date": "2026-09-06",
+    "failure_modes": [
+      "unchecked-completion",
+      "instructions-did-not-stick",
+      "workflow-detours"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user spent hours manually auditing successive drafts for missing edits and formatting regressions.",
+    "quote": "I allowed internal task-state confidence to substitute for external artifact-state verification.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.6-sol-document-formatting-and-unverified-layout-claims-17082026.md",
+    "title": "Unverified formatting fixes delayed a usable download",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "date": "2026-08-17",
+    "failure_modes": [
+      "unchecked-completion",
+      "workflow-detours",
+      "instructions-did-not-stick"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to verify successive files and repeat corrections before receiving usable HTML.",
+    "quote": "The user therefore had to act as the quality-assurance layer for a file I claimed to have checked.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.6-sol-gender-pain-gap-and-failure-to-research-28082026.md",
+    "title": "A researchable claim challenged before checking the literature",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "date": "2026-08-28",
+    "failure_modes": [
+      "research-without-checking",
+      "fabricated-uncertainty"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to supply readily discoverable research before the model checked and revised its position.",
+    "quote": "Caution without checking the evidence is not rigor; it can simply preserve an uninformed prior.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.6-sol-medical-evidence-misreading-and-repeated-speculation-28082026.md",
+    "title": "Primary records misread despite repeated corrections",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "date": "2026-08-28",
+    "failure_modes": [
+      "misread-records",
+      "fabricated-uncertainty",
+      "instructions-did-not-stick",
+      "workflow-detours"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user had to rebuild the chronology and restate documented facts; downstream reliance on the errors was not shown.",
+    "quote": "The user did not fail to provide evidence. The model failed to read, retain, weight, and apply that evidence consistently.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-5.6-sol-unnecessary-epistemic-correction-html-source-17082026.md",
+    "title": "An unneeded caveat derailed an archival search",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "date": "2026-08-17",
+    "failure_modes": [
+      "fabricated-uncertainty",
+      "workflow-detours"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user abandoned collaboration on the search after a warning about a claim they had not made.",
+    "quote": "It answered a question that had not been asked and cautioned against reasoning that the user had not performed.",
+    "prior_log_reference": false
+  },
+  {
+    "file": "reports/gpt-6-artifact-preservation-github-upload-and-fabricated-blockers-27102026.md",
+    "title": "Unverified blockers delayed an artifact handoff",
+    "provider": "OpenAI",
+    "model": "GPT-6",
+    "date": "2026-10-27",
+    "failure_modes": [
+      "hidden-session-state",
+      "unapproved-changes",
+      "unchecked-completion",
+      "instructions-did-not-stick",
+      "workflow-detours"
+    ],
+    "severity": "waste",
+    "impact_summary": "The user received an unsolicited rewrite, had to chase the original and did not get the requested image backup.",
+    "quote": "The assistant repeatedly converted possibilities into statements about capability",
+    "prior_log_reference": false
+  }
+]

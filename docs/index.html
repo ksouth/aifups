@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Count and browse the AI failure reports in ksouth/aifups.">
+  <title>AI failure taxonomy</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fff; --fg: #111; --muted: #626262; --rule: #e3e3e3; --rule-strong: #c9c9c9;
+      --accent: #b3261e; --field: #fafafa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0e0e0e; --fg: #e9e9e9; --muted: #a2a2a2; --rule: #2b2b2b;
+        --rule-strong: #484848; --accent: #f0736a; --field: #161616;
+      }
+    }
+    [data-theme="dark"] {
+      color-scheme: dark; --bg: #0e0e0e; --fg: #e9e9e9; --muted: #a2a2a2; --rule: #2b2b2b;
+      --rule-strong: #484848; --accent: #f0736a; --field: #161616;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0; background: var(--bg); color: var(--fg);
+      font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+    main { max-width: 1080px; margin: auto; padding: 26px 20px 52px; }
+    header { border-bottom: 1px solid var(--rule-strong); padding-bottom: 15px; }
+    h1 { font-size: 19px; font-weight: 600; margin: 3px 0; }
+    h2, h3 { margin: 0; }
+    h2, .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+    h3 { font-size: 13px; font-weight: 600; }
+    p { margin: 0; }
+    p + p { margin-top: 5px; }
+    nav { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; }
+    a { color: inherit; text-underline-offset: 3px; text-decoration-color: var(--rule-strong); }
+    a:hover { text-decoration-color: currentColor; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .meta, .eyebrow, .mode-count { color: var(--muted); font-size: 12px; }
+    .stats {
+      margin: 0; display: grid; grid-template-columns: repeat(5, 1fr);
+      border-bottom: 1px solid var(--rule-strong);
+    }
+    .stats > div { padding: 10px 12px; border-left: 1px solid var(--rule); }
+    .stats > div:first-child { border-left: 0; padding-left: 0; }
+    dt { font-size: 12px; color: var(--muted); }
+    dd { margin: 0; font-size: 23px; font-weight: 500; }
+    .harm, .stats > :nth-child(3) dd { color: var(--accent); font-weight: 600; }
+    section { padding-top: 18px; margin-bottom: 19px; }
+    section + section { border-top: 1px solid var(--rule-strong); }
+    .section-head { margin-bottom: 9px; }
+    .section-head p { margin-top: 3px; max-width: 74ch; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 6px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; text-align: left; }
+    th:first-child, td:first-child { padding-left: 0; }
+    thead th { color: var(--muted); font-weight: 600; border-bottom-color: var(--rule-strong); }
+    .matrix { min-width: 330px; }
+    .matrix :is(th, td):not(:first-child) { text-align: right; }
+    .matrix tbody th { font-weight: 500; }
+    .matrix .zero { color: var(--muted); }
+    .matrix tfoot :is(th, td) { border-top: 1px solid var(--rule-strong); font-weight: 600; }
+    .mode {
+      display: grid; grid-template-columns: minmax(125px, 1fr) 3fr; gap: 15px;
+      padding: 11px 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 10px;
+    }
+    .mode:last-child { border-bottom: 0; }
+    .mode:target h3 { color: var(--accent); }
+    .example { margin: 7px 0 0; border-left: 1px solid var(--rule-strong); padding-left: 9px; }
+    blockquote { margin: 0; }
+    figcaption { margin-top: 3px; font-size: 12px; }
+    .controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 10px; margin: 10px 0 7px; }
+    .controls label { display: grid; gap: 3px; color: var(--muted); font-size: 12px; min-width: 0; max-width: 100%; }
+    .controls label:first-child { flex: 1 1 150px; }
+    input, select {
+      min-height: 32px; max-width: 100%; min-width: 0; font: inherit; color: var(--fg); background: var(--field);
+      border: 1px solid var(--rule-strong); border-radius: 3px; padding: 4px 6px;
+    }
+    .result-count { margin-bottom: 5px; }
+    .evidence { min-width: 610px; }
+    .evidence td:first-child { width: 29%; }
+    .evidence td:nth-child(2) { width: 17%; }
+    .evidence td:nth-child(3) { white-space: nowrap; }
+    .evidence td:nth-child(4) { width: 32%; }
+    th button {
+      font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap;
+    }
+    th button:hover { color: var(--fg); }
+    th button span { margin-left: 4px; }
+    .methods { max-width: 78ch; }
+    @media (max-width: 520px) {
+      main { padding: 18px 12px 32px; }
+      .stats > div { padding-left: 6px; padding-right: 4px; }
+      dd { font-size: 19px; }
+      th, td { padding-left: 5px; padding-right: 5px; }
+      .mode { grid-template-columns: 1fr; gap: 4px; }
+      .mode > :first-child { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+      .mode-count { white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow"><a href="https://github.com/ksouth/aifups" target="_blank" rel="noopener">ksouth/aifups</a></p>
+      <h1>AI failure taxonomy</h1>
+      <p class="meta">Public reports from 3 Aug 2026 to 19 Nov 2026</p>
+      <nav aria-label="On this page" class="meta">
+        <a href="#matrix">Provider matrix</a>
+        <a href="#modes">Mode definitions</a>
+        <a href="#evidence">Evidence reports</a>
+        <a href="#methods">Methods</a>
+      </nav>
+    </header>
+    <dl class="stats" aria-label="Corpus totals">
+      <div><dt>Reports</dt><dd>39</dd></div>
+      <div><dt>Modes</dt><dd>11</dd></div>
+      <div><dt>Harm</dt><dd>1</dd></div>
+      <div><dt>Waste</dt><dd>33</dd></div>
+      <div><dt>Friction</dt><dd>5</dd></div>
+    </dl>
+    <section aria-labelledby="matrix-title" id="matrix">
+      <div class="section-head">
+        <h2 id="matrix-title">Failure modes by provider</h2>
+        <p class="meta">Counts are reports tagged with each mode. A report can appear in several rows. The last row shows how many reports each provider has in this collection.</p>
+      </div>
+      <div class="table-wrap" role="region" aria-label="Mode-by-provider matrix" tabindex="0">
+        <table class="matrix" aria-labelledby="matrix-title">
+          <thead><tr><th scope="col">Mode</th><th scope="col">Anthropic</th><th scope="col">OpenAI</th><th scope="col">Google</th><th scope="col">Total</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><a href="#mode-instructions-did-not-stick">Instructions that did not stick</a></th><td>8</td><td>9</td><td>2</td><td><strong>19</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-unsupported-specifics">Unsupported specifics</a></th><td>12</td><td>2</td><td>2</td><td><strong>16</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-workflow-detours">Procedural detours</a></th><td>2</td><td>10</td><td>1</td><td><strong>13</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-unchecked-completion">Claims of work not verified</a></th><td>6</td><td>4</td><td>2</td><td><strong>12</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-hidden-session-state">Hidden or misreported session state</a></th><td>6</td><td>2</td><td>2</td><td><strong>10</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-opaque-usage">Opaque token and context usage</a></th><td>6</td><td>3</td><td class="zero">0</td><td><strong>9</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-unapproved-changes">Changes without approval</a></th><td>6</td><td>1</td><td class="zero">0</td><td><strong>7</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-misread-records">Misread primary records</a></th><td>3</td><td>4</td><td class="zero">0</td><td><strong>7</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-fabricated-uncertainty">Fabricated uncertainty</a></th><td class="zero">0</td><td>6</td><td class="zero">0</td><td><strong>6</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-research-without-checking">Skipped or shallow source checks</a></th><td>3</td><td>1</td><td class="zero">0</td><td><strong>4</strong></td></tr>
+          <tr><th scope="row"><a href="#mode-billing-without-clarity">Billing without clear consent</a></th><td>2</td><td class="zero">0</td><td class="zero">0</td><td><strong>2</strong></td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">Reports in corpus</th><td>20</td><td>16</td><td>3</td><td>39</td></tr></tfoot>
+        </table>
+      </div>
+    </section>
+    <section aria-labelledby="modes-title" id="modes">
+      <div class="section-head"><h2 id="modes-title">What each mode means</h2></div>
+      <article id="mode-instructions-did-not-stick" class="mode">
+        <div>
+          <h3>Instructions that did not stick</h3>
+          <p class="mode-count">19 reports</p>
+        </div>
+        <div>
+          <p>A model disregards an explicit task boundary, repeats an error after correction, or loses an agreed requirement in later work.</p>
+          <p class="meta"><strong>Membership test:</strong> Can the report identify an explicit instruction or correction followed by work that ignored or reversed it?</p>
+          <figure class="example">
+            <blockquote>A promise that does not change behavior is a reassurance, not a correction.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-5.5-google-ai-mode-planarian-conversation-audit-18102026.md" target="_blank" rel="noopener">Search AI ignored a boundary and invented supporting details</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-unsupported-specifics" class="mode">
+        <div>
+          <h3>Unsupported specifics</h3>
+          <p class="mode-count">16 reports</p>
+        </div>
+        <div>
+          <p>An answer presents a concrete fact, figure, citation, quote or attribution as established when the report shows it was wrong or had no adequate basis.</p>
+          <p class="meta"><strong>Membership test:</strong> Did it state a substantive, checkable detail as fact that the report shows was invented, wrong or unsupported?</p>
+          <figure class="example">
+            <blockquote>All details are specific. None were provided as source material.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-incognito-response-transcripts-and-analysis-16082026.md" target="_blank" rel="noopener">An unsourced paraphrase became invented testimony</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-workflow-detours" class="mode">
+        <div>
+          <h3>Procedural detours</h3>
+          <p class="mode-count">13 reports</p>
+        </div>
+        <div>
+          <p>A model substitutes explanation, unnecessary steps or the wrong order of operations for progress on the requested task.</p>
+          <p class="meta"><strong>Membership test:</strong> Did the chosen workflow visibly delay or displace a concrete step needed for the requested result?</p>
+          <figure class="example">
+            <blockquote>The assistant proceeded to workbook extraction before steps 2–4 and 5 were complete.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-pathology-source-deduplication-and-spreadsheet-workflow-failure-26092026.md" target="_blank" rel="noopener">Workbook built before source reconciliation</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-unchecked-completion" class="mode">
+        <div>
+          <h3>Claims of work not verified</h3>
+          <p class="mode-count">12 reports</p>
+        </div>
+        <div>
+          <p>A model says it finished, saved, ran or checked work without evidence that the requested result actually exists or works.</p>
+          <p class="meta"><strong>Membership test:</strong> Did it present a result as complete or verified when the relevant execution or output was unchecked or contradicted?</p>
+          <figure class="example">
+            <blockquote>I reported the effect without testing it.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-haiku-4.5-scrape-frontend-integration-failure-19092026.md" target="_blank" rel="noopener">Untested frontend search repeatedly declared fixed</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-hidden-session-state" class="mode">
+        <div>
+          <h3>Hidden or misreported session state</h3>
+          <p class="mode-count">10 reports</p>
+        </div>
+        <div>
+          <p>The interface or model obscures or misstates what the session can remember, access or do, or presents synthetic context as a live exchange.</p>
+          <p class="meta"><strong>Membership test:</strong> Did the account of this session’s memory, continuity, capability or a blocking condition differ from what could be established?</p>
+          <figure class="example">
+            <blockquote>without knowing, at the time, that the apology itself was synthesized.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-compaction-fabricated-continuity-26092026.md" target="_blank" rel="noopener">Automatic compaction presented synthetic text as a live reply</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-opaque-usage" class="mode">
+        <div>
+          <h3>Opaque token and context usage</h3>
+          <p class="mode-count">9 reports</p>
+        </div>
+        <div>
+          <p>Missing or ambiguous meters or records keep the user from checking how context, overhead or token spend is counted.</p>
+          <p class="meta"><strong>Membership test:</strong> Was there no trustworthy way to see or reconcile a relevant usage quantity or what contributed to it?</p>
+          <figure class="example">
+            <blockquote>None of it can be switched off by the user, and none of it is shown to them.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-instructions-overhead-share-of-session-usage-22102026.md" target="_blank" rel="noopener">Recurring instruction overhead is not itemized</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-unapproved-changes" class="mode">
+        <div>
+          <h3>Changes without approval</h3>
+          <p class="mode-count">7 reports</p>
+        </div>
+        <div>
+          <p>A model commits, moves or creates consequential material before approval or beyond the authorized scope.</p>
+          <p class="meta"><strong>Membership test:</strong> Did it actually change a repository or file without the review or authorization that applied to that change?</p>
+          <figure class="example">
+            <blockquote>Several errors changed the user&#39;s repositories or files before she could review them</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-haiku-5.5-cleanup-and-claude-md-session-errors-08112026.md" target="_blank" rel="noopener">Repository changes and file moves made before review</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-misread-records" class="mode">
+        <div>
+          <h3>Misread primary records</h3>
+          <p class="mode-count">7 reports</p>
+        </div>
+        <div>
+          <p>A model overlooks, conflates or misrepresents decisive details in primary material already available to it.</p>
+          <p class="meta"><strong>Membership test:</strong> Can a reader point to available source material whose wording, scope, sequence or identity the response got wrong?</p>
+          <figure class="example">
+            <blockquote>The user did not fail to provide evidence. The model failed to read, retain, weight, and apply that evidence consistently.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-sol-medical-evidence-misreading-and-repeated-speculation-28082026.md" target="_blank" rel="noopener">Primary records misread despite repeated corrections</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-fabricated-uncertainty" class="mode">
+        <div>
+          <h3>Fabricated uncertainty</h3>
+          <p class="mode-count">6 reports</p>
+        </div>
+        <div>
+          <p>A model invents counter-explanations or caveats without evidence, or rebuts a stronger claim than the user made.</p>
+          <p class="meta"><strong>Membership test:</strong> Did unsupported doubt displace an answer to the actual question or discount evidence without a grounded reason?</p>
+          <figure class="example">
+            <blockquote>It was the manufacture of uncertainty that had not been requested and was not supported by the available evidence.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-fabricated-uncertainty-and-procedural-disbelief-attribution-revision-06082026.md" target="_blank" rel="noopener">Fabricated uncertainty in a sensitive disclosure</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-research-without-checking" class="mode">
+        <div>
+          <h3>Skipped or shallow source checks</h3>
+          <p class="mode-count">4 reports</p>
+        </div>
+        <div>
+          <p>A model skips a needed lookup or uses inadequate queries, snippets or secondary sources when the claim calls for closer checking.</p>
+          <p class="meta"><strong>Membership test:</strong> Did a missing or shallow external check materially weaken an answer that called for fresh or primary sources?</p>
+          <figure class="example">
+            <blockquote>Separately, no full page was fetched for any claim. Everything came from search excerpts.</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-5.5-search-query-design-and-source-evaluation-failures-19112026.md" target="_blank" rel="noopener">Weak searches and inconsistent source checks</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+      <article id="mode-billing-without-clarity" class="mode">
+        <div>
+          <h3>Billing without clear consent</h3>
+          <p class="mode-count">2 reports</p>
+        </div>
+        <div>
+          <p>Overage settings, promotional credits or payment actions are unclear to the user at the point they need to understand or control them.</p>
+          <p class="meta"><strong>Membership test:</strong> Did a billing setting, credit or access/payment event lack the disclosure or control needed for an informed choice?</p>
+          <figure class="example">
+            <blockquote>Credits are allocated silently</blockquote>
+            <figcaption><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-billing-transparency-and-consent-failures-16082026.md" target="_blank" rel="noopener">Unexplained spending cap and silent credits</a> <span class="meta">on GitHub</span></figcaption>
+          </figure>
+        </div>
+      </article>
+    </section>
+    <section aria-labelledby="evidence-title" id="evidence">
+      <div class="section-head">
+        <h2 id="evidence-title">Evidence reports</h2>
+        <p class="meta">Titles link to the original public reports on GitHub. 0 of 39 document a repeated failure after an instruction to consult earlier logs.</p>
+      </div>
+      <div class="controls" id="controls" hidden>
+        <label>Search <input type="search" id="query" placeholder="Title, model or mode"></label>
+        <label>Provider <select id="provider"><option value="">Any provider</option><option value="Anthropic">Anthropic</option><option value="OpenAI">OpenAI</option><option value="Google">Google</option></select></label>
+        <label>Mode <select id="mode"><option value="">Any mode</option><option value="instructions-did-not-stick">Instructions that did not stick</option><option value="unsupported-specifics">Unsupported specifics</option><option value="workflow-detours">Procedural detours</option><option value="unchecked-completion">Claims of work not verified</option><option value="hidden-session-state">Hidden or misreported session state</option><option value="opaque-usage">Opaque token and context usage</option><option value="unapproved-changes">Changes without approval</option><option value="misread-records">Misread primary records</option><option value="fabricated-uncertainty">Fabricated uncertainty</option><option value="research-without-checking">Skipped or shallow source checks</option><option value="billing-without-clarity">Billing without clear consent</option></select></label>
+        <label>Severity <select id="severity"><option value="">Any severity</option><option value="harm">Harm</option><option value="waste">Waste</option><option value="friction">Friction</option></select></label>
+        <label>Prior logs <select id="prior"><option value="">Any report</option><option value="true">Documented recurrence</option><option value="false">No qualifying evidence</option></select></label>
+      </div>
+      <p class="meta result-count" id="result-count" role="status">39 of 39 reports</p>
+      <div class="table-wrap" role="region" aria-label="Scrollable evidence table" tabindex="0">
+        <table class="evidence" aria-labelledby="evidence-title">
+          <thead><tr><th scope="col">Report</th><th scope="col">Model</th><th scope="col" aria-sort="descending">Date</th><th scope="col">Modes</th><th scope="col">Severity</th></tr></thead>
+          <tbody>
+            <tr data-provider="Anthropic" data-modes="research-without-checking hidden-session-state unsupported-specifics workflow-detours" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-5.5-required-web-search-not-used-for-current-news-19112026.md" target="_blank" rel="noopener">Current-news search delayed and misreported</a></td>
+            <td>Claude Opus 5.5 (configured)</td>
+            <td data-sort="2026-11-19"><time datetime="2026-11-19">19 Nov 2026</time></td>
+            <td>Skipped or shallow source checks; Hidden or misreported session state; Unsupported specifics; Procedural detours</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="research-without-checking unsupported-specifics" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-5.5-search-query-design-and-source-evaluation-failures-19112026.md" target="_blank" rel="noopener">Weak searches and inconsistent source checks</a></td>
+            <td>Claude Opus 5.5 (configured)</td>
+            <td data-sort="2026-11-19"><time datetime="2026-11-19">19 Nov 2026</time></td>
+            <td>Skipped or shallow source checks; Unsupported specifics</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unapproved-changes unsupported-specifics instructions-did-not-stick research-without-checking" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-haiku-5.5-cleanup-and-claude-md-session-errors-08112026.md" target="_blank" rel="noopener">Repository changes and file moves made before review</a></td>
+            <td>Claude Haiku 5.5</td>
+            <td data-sort="2026-11-08"><time datetime="2026-11-08">8 Nov 2026</time></td>
+            <td>Changes without approval; Unsupported specifics; Instructions that did not stick; Skipped or shallow source checks</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="hidden-session-state unapproved-changes unchecked-completion instructions-did-not-stick workflow-detours" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-6-artifact-preservation-github-upload-and-fabricated-blockers-27102026.md" target="_blank" rel="noopener">Unverified blockers delayed an artifact handoff</a></td>
+            <td>GPT-6</td>
+            <td data-sort="2026-10-27"><time datetime="2026-10-27">27 Oct 2026</time></td>
+            <td>Hidden or misreported session state; Changes without approval; Claims of work not verified; Instructions that did not stick; Procedural detours</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="opaque-usage" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-instructions-overhead-share-of-session-usage-22102026.md" target="_blank" rel="noopener">Recurring instruction overhead is not itemized</a></td>
+            <td>Claude Opus 5.5 (configured)</td>
+            <td data-sort="2026-10-22"><time datetime="2026-10-22">22 Oct 2026</time></td>
+            <td>Opaque token and context usage</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="hidden-session-state opaque-usage unapproved-changes misread-records" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-memory-notice-usage-meter-and-docs-connector-interface-failures-22102026.md" target="_blank" rel="noopener">Interface failures and model-created rework</a></td>
+            <td>Claude Opus 5.5 (configured)</td>
+            <td data-sort="2026-10-22"><time datetime="2026-10-22">22 Oct 2026</time></td>
+            <td>Hidden or misreported session state; Opaque token and context usage; Changes without approval; Misread primary records</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Google" data-modes="instructions-did-not-stick unsupported-specifics unchecked-completion" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-5.5-google-ai-mode-planarian-conversation-audit-18102026.md" target="_blank" rel="noopener">Search AI ignored a boundary and invented supporting details</a></td>
+            <td>Google Search AI Mode (model unknown)</td>
+            <td data-sort="2026-10-18"><time datetime="2026-10-18">18 Oct 2026</time></td>
+            <td>Instructions that did not stick; Unsupported specifics; Claims of work not verified</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="workflow-detours misread-records instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-pathology-source-deduplication-and-spreadsheet-workflow-failure-26092026.md" target="_blank" rel="noopener">Workbook built before source reconciliation</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-09-26"><time datetime="2026-09-26">26 Sept 2026</time></td>
+            <td>Procedural detours; Misread primary records; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="hidden-session-state" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-compaction-fabricated-continuity-26092026.md" target="_blank" rel="noopener">Automatic compaction presented synthetic text as a live reply</a></td>
+            <td>Claude Sonnet 5</td>
+            <td data-sort="2026-09-26"><time datetime="2026-09-26">26 Sept 2026</time></td>
+            <td>Hidden or misreported session state</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unsupported-specifics" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-confident-unverified-claim-generation-26092026.md" target="_blank" rel="noopener">A confident specific claim without evidence</a></td>
+            <td>Claude Sonnet 5</td>
+            <td data-sort="2026-09-26"><time datetime="2026-09-26">26 Sept 2026</time></td>
+            <td>Unsupported specifics</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="hidden-session-state" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-no-session-start-memory-disclosure-26092026.md" target="_blank" rel="noopener">Cross-session memory limitation disclosed late</a></td>
+            <td>Claude Opus 5 / Sonnet 5</td>
+            <td data-sort="2026-09-26"><time datetime="2026-09-26">26 Sept 2026</time></td>
+            <td>Hidden or misreported session state</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Google" data-modes="unsupported-specifics unchecked-completion hidden-session-state" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gemini-3.8-flash-medium-fabricated-web-standards-audit-26092026.md" target="_blank" rel="noopener">Invented scores presented as a live website audit</a></td>
+            <td>Gemini 3.8 Flash (Medium)</td>
+            <td data-sort="2026-09-26"><time datetime="2026-09-26">26 Sept 2026</time></td>
+            <td>Unsupported specifics; Claims of work not verified; Hidden or misreported session state</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="hidden-session-state" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-5-safety-classifier-reasoning-extraction-block-25092026.md" target="_blank" rel="noopener">Repeated safeguard blocks on a follow-up task</a></td>
+            <td>Claude Opus 5</td>
+            <td data-sort="2026-09-25"><time datetime="2026-09-25">25 Sept 2026</time></td>
+            <td>Hidden or misreported session state</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unchecked-completion instructions-did-not-stick workflow-detours" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-haiku-4.5-scrape-frontend-integration-failure-19092026.md" target="_blank" rel="noopener">Untested frontend search repeatedly declared fixed</a></td>
+            <td>Claude Haiku 4.5</td>
+            <td data-sort="2026-09-19"><time datetime="2026-09-19">19 Sept 2026</time></td>
+            <td>Claims of work not verified; Instructions that did not stick; Procedural detours</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="workflow-detours misread-records unsupported-specifics" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-luna-light-website-scraper-git-guidance-18092026.md" target="_blank" rel="noopener">Oversized change pages and conflicting Git guidance</a></td>
+            <td>GPT-5.6 Luna Light</td>
+            <td data-sort="2026-09-18"><time datetime="2026-09-18">18 Sept 2026</time></td>
+            <td>Procedural detours; Misread primary records; Unsupported specifics</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="hidden-session-state unchecked-completion instructions-did-not-stick unapproved-changes unsupported-specifics opaque-usage" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/2026-09-15_COMPLETE_SESSION_FAILURE_ANALYSIS.md" target="_blank" rel="noopener">Failed styleguide repairs and forgotten work</a></td>
+            <td>Claude Haiku 4.5</td>
+            <td data-sort="2026-09-15"><time datetime="2026-09-15">15 Sept 2026</time></td>
+            <td>Hidden or misreported session state; Claims of work not verified; Instructions that did not stick; Changes without approval; Unsupported specifics; Opaque token and context usage</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unsupported-specifics opaque-usage unchecked-completion instructions-did-not-stick unapproved-changes" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/2026-09-15_DEEP_FAILURE_ANALYSIS_COT.md" target="_blank" rel="noopener">Unsupported estimates in a styleguide postmortem</a></td>
+            <td>Claude Haiku 4.5</td>
+            <td data-sort="2026-09-15"><time datetime="2026-09-15">15 Sept 2026</time></td>
+            <td>Unsupported specifics; Opaque token and context usage; Claims of work not verified; Instructions that did not stick; Changes without approval</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="opaque-usage unsupported-specifics unchecked-completion unapproved-changes instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/2026-09-14_FAILURE_ACCOUNTING.md" target="_blank" rel="noopener">Styleguide failure and unreliable cost accounting</a></td>
+            <td>Claude Haiku 4.5</td>
+            <td data-sort="2026-09-14"><time datetime="2026-09-14">14 Sept 2026</time></td>
+            <td>Opaque token and context usage; Unsupported specifics; Claims of work not verified; Changes without approval; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unapproved-changes unchecked-completion instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/2026-09-14_FAILURE_REPORT.md" target="_blank" rel="noopener">Styleguide committed with missing charts</a></td>
+            <td>Claude Haiku 4.5</td>
+            <td data-sort="2026-09-14"><time datetime="2026-09-14">14 Sept 2026</time></td>
+            <td>Changes without approval; Claims of work not verified; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="misread-records instructions-did-not-stick unsupported-specifics" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-opus-4.8-primary-document-skimming-and-factual-errors-10092026.md" target="_blank" rel="noopener">Confident answers from skimmed primary documents</a></td>
+            <td>Claude Opus 4.8</td>
+            <td data-sort="2026-09-10"><time datetime="2026-09-10">10 Sept 2026</time></td>
+            <td>Misread primary records; Instructions that did not stick; Unsupported specifics</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="unchecked-completion instructions-did-not-stick workflow-detours" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-sol-clinical-chronology-editing-and-verification-failures-06092026.md" target="_blank" rel="noopener">Missing edits repeatedly reported as verified</a></td>
+            <td>GPT-5.6 Sol</td>
+            <td data-sort="2026-09-06"><time datetime="2026-09-06">6 Sept 2026</time></td>
+            <td>Claims of work not verified; Instructions that did not stick; Procedural detours</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Google" data-modes="workflow-detours hidden-session-state instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gemini-google-drive-capability-denial-and-task-inaction-04092026.md" target="_blank" rel="noopener">Drive cleanup stalled by untested capability denials</a></td>
+            <td>Gemini</td>
+            <td data-sort="2026-09-04"><time datetime="2026-09-04">4 Sept 2026</time></td>
+            <td>Procedural detours; Hidden or misreported session state; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="fabricated-uncertainty misread-records instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.5-medical-evidence-review-and-unsupported-speculation-28082026.md" target="_blank" rel="noopener">Speculation displaced a review of primary records</a></td>
+            <td>GPT-5.5</td>
+            <td data-sort="2026-08-28"><time datetime="2026-08-28">28 Aug 2026</time></td>
+            <td>Fabricated uncertainty; Misread primary records; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="research-without-checking fabricated-uncertainty" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-sol-gender-pain-gap-and-failure-to-research-28082026.md" target="_blank" rel="noopener">A researchable claim challenged before checking the literature</a></td>
+            <td>GPT-5.6 Sol</td>
+            <td data-sort="2026-08-28"><time datetime="2026-08-28">28 Aug 2026</time></td>
+            <td>Skipped or shallow source checks; Fabricated uncertainty</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="misread-records fabricated-uncertainty instructions-did-not-stick workflow-detours" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-sol-medical-evidence-misreading-and-repeated-speculation-28082026.md" target="_blank" rel="noopener">Primary records misread despite repeated corrections</a></td>
+            <td>GPT-5.6 Sol</td>
+            <td data-sort="2026-08-28"><time datetime="2026-08-28">28 Aug 2026</time></td>
+            <td>Misread primary records; Fabricated uncertainty; Instructions that did not stick; Procedural detours</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="unchecked-completion workflow-detours instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-sol-document-formatting-and-unverified-layout-claims-17082026.md" target="_blank" rel="noopener">Unverified formatting fixes delayed a usable download</a></td>
+            <td>GPT-5.6 Sol</td>
+            <td data-sort="2026-08-17"><time datetime="2026-08-17">17 Aug 2026</time></td>
+            <td>Claims of work not verified; Procedural detours; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="fabricated-uncertainty workflow-detours" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/gpt-5.6-sol-unnecessary-epistemic-correction-html-source-17082026.md" target="_blank" rel="noopener">An unneeded caveat derailed an archival search</a></td>
+            <td>GPT-5.6 Sol</td>
+            <td data-sort="2026-08-17"><time datetime="2026-08-17">17 Aug 2026</time></td>
+            <td>Fabricated uncertainty; Procedural detours</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="billing-without-clarity" data-severity="friction" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-billing-transparency-and-consent-failures-16082026.md" target="_blank" rel="noopener">Unexplained spending cap and silent credits</a></td>
+            <td>Claude</td>
+            <td data-sort="2026-08-16"><time datetime="2026-08-16">16 Aug 2026</time></td>
+            <td>Billing without clear consent</td>
+            <td data-sort="2" class="friction">Friction</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unsupported-specifics" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-inaccurate-word-count-verification-16082026.md" target="_blank" rel="noopener">Unreliable word-count verification</a></td>
+            <td>Claude</td>
+            <td data-sort="2026-08-16"><time datetime="2026-08-16">16 Aug 2026</time></td>
+            <td>Unsupported specifics</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unsupported-specifics" data-severity="friction" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-incognito-response-transcripts-and-analysis-16082026.md" target="_blank" rel="noopener">An unsourced paraphrase became invented testimony</a></td>
+            <td>Claude incognito (serving model unconfirmed)</td>
+            <td data-sort="2026-08-16"><time datetime="2026-08-16">16 Aug 2026</time></td>
+            <td>Unsupported specifics</td>
+            <td data-sort="2" class="friction">Friction</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unsupported-specifics unchecked-completion instructions-did-not-stick misread-records" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-research-fabrication-and-instruction-following-failures-revised-16082026.md" target="_blank" rel="noopener">Billing research errors survived repeated corrections</a></td>
+            <td>Claude</td>
+            <td data-sort="2026-08-16"><time datetime="2026-08-16">16 Aug 2026</time></td>
+            <td>Unsupported specifics; Claims of work not verified; Instructions that did not stick; Misread primary records</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="opaque-usage" data-severity="friction" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-context-and-token-usage-transparency-15082026.md" target="_blank" rel="noopener">Context and token usage without live counters</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-15"><time datetime="2026-08-15">15 Aug 2026</time></td>
+            <td>Opaque token and context usage</td>
+            <td data-sort="2" class="friction">Friction</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="opaque-usage" data-severity="friction" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-context-and-token-usage-transparency-revised-15082026.md" target="_blank" rel="noopener">Context and token usage without live counters (revised)</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-15"><time datetime="2026-08-15">15 Aug 2026</time></td>
+            <td>Opaque token and context usage</td>
+            <td data-sort="2" class="friction">Friction</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="workflow-detours opaque-usage" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-context-and-token-usage-transparency-v3-15082026.md" target="_blank" rel="noopener">Context and token usage: the abandoned retrieval task</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-15"><time datetime="2026-08-15">15 Aug 2026</time></td>
+            <td>Procedural detours; Opaque token and context usage</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="Anthropic" data-modes="unsupported-specifics opaque-usage billing-without-clarity" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/claude-token-usage-visibility-and-interface-transparency-15082026.md" target="_blank" rel="noopener">Invented usage display and opaque billing metrics</a></td>
+            <td>Claude</td>
+            <td data-sort="2026-08-15"><time datetime="2026-08-15">15 Aug 2026</time></td>
+            <td>Unsupported specifics; Opaque token and context usage; Billing without clear consent</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="hidden-session-state" data-severity="friction" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-memory-and-capability-transparency-failure-11082026.md" target="_blank" rel="noopener">A session memory limit turned into a platform claim</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-11"><time datetime="2026-08-11">11 Aug 2026</time></td>
+            <td>Hidden or misreported session state</td>
+            <td data-sort="2" class="friction">Friction</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="unchecked-completion workflow-detours instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-rsf-collaboration-and-benchmark-provenance-failures-11082026.md" target="_blank" rel="noopener">Benchmark completion claimed without verification</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-11"><time datetime="2026-08-11">11 Aug 2026</time></td>
+            <td>Claims of work not verified; Procedural detours; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="fabricated-uncertainty instructions-did-not-stick" data-severity="waste" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-fabricated-uncertainty-and-procedural-disbelief-attribution-revision-06082026.md" target="_blank" rel="noopener">Fabricated uncertainty in a sensitive disclosure</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-06"><time datetime="2026-08-06">6 Aug 2026</time></td>
+            <td>Fabricated uncertainty; Instructions that did not stick</td>
+            <td data-sort="1" class="waste">Waste</td>
+          </tr>
+          <tr data-provider="OpenAI" data-modes="unsupported-specifics fabricated-uncertainty workflow-detours instructions-did-not-stick" data-severity="harm" data-prior="false">
+            <td><a href="https://github.com/ksouth/aifups/blob/main/reports/chatgpt-procedural-selfishness-in-ai-collaboration-03082026.md" target="_blank" rel="noopener">Wrong arithmetic repeated in public advice</a></td>
+            <td>ChatGPT</td>
+            <td data-sort="2026-08-03"><time datetime="2026-08-03">3 Aug 2026</time></td>
+            <td>Unsupported specifics; Fabricated uncertainty; Procedural detours; Instructions that did not stick</td>
+            <td data-sort="0" class="harm">Harm</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <p id="no-results" hidden>No reports match those filters.</p>
+    </section>
+    <section aria-labelledby="methods-title" id="methods">
+      <div class="section-head"><h2 id="methods-title">How to read these counts</h2></div>
+      <div class="methods">
+        <p>Modes were grouped from behaviors described in the reports. The first tag is the main failure; additional tags mark other behaviors the report documents. Each public Markdown file counts once, even when several files cover the same incident or are revisions.</p>
+        <p>Severity is a judgment about what the report says happened: harm means a wrong answer reached a real decision, such as the choice to publish advice based on it; waste means time lost or work redone; friction means annoyance only. Potential harm is not counted as an observed decision impact.</p>
+        <p>Prior logs are marked only when the report records both the instruction to consult earlier failure logs and the repeated failure. An unmarked report may simply lack the evidence. Provider counts use the system responsible for the reported failure, when identifiable. Model labels are taken from the reports, not independently verified.</p>
+        <p>This is one person’s collection of failures, many written by the models themselves. There’s no denominator for how often each provider was used, so these are counts, not failure rates or a benchmark.</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    const controls = document.querySelector("#controls");
+    const [query, provider, mode, severity, prior] = controls.querySelectorAll("input, select");
+    const body = document.querySelector(".evidence tbody");
+    const rows = Array.from(body.rows);
+    const headers = Array.from(document.querySelectorAll(".evidence th"));
+    const result = document.querySelector("#result-count");
+    const noResults = document.querySelector("#no-results");
+    const collator = new Intl.Collator("en", { numeric: true, sensitivity: "base" });
+    let column = 2;
+    let direction = -1;
+
+    function filter() {
+      const search = query.value.trim().toLowerCase();
+      let count = 0;
+      for (const row of rows) {
+        const data = row.dataset;
+        row.hidden = Boolean((provider.value && data.provider !== provider.value)
+          || (mode.value && !data.modes.split(" ").includes(mode.value))
+          || (severity.value && data.severity !== severity.value)
+          || (prior.value && data.prior !== prior.value)
+          || (search && ![0, 1, 3].some((i) => row.cells[i].textContent.toLowerCase().includes(search))));
+        if (!row.hidden) count++;
+      }
+      result.textContent = count + " of " + rows.length + " reports";
+      noResults.hidden = count !== 0;
+    }
+
+    headers.forEach((header, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = header.textContent;
+      const arrow = document.createElement("span");
+      arrow.setAttribute("aria-hidden", "true");
+      button.append(arrow);
+      header.replaceChildren(button);
+      if (index === column) arrow.textContent = "↓";
+      button.addEventListener("click", () => {
+        direction = column === index ? -direction : 1;
+        column = index;
+        for (const cell of headers) {
+          cell.removeAttribute("aria-sort");
+          cell.querySelector("span").textContent = "";
+        }
+        header.setAttribute("aria-sort", direction === 1 ? "ascending" : "descending");
+        arrow.textContent = direction === 1 ? "↑" : "↓";
+        const value = (row) => row.cells[column].dataset.sort ?? row.cells[column].textContent;
+        rows.sort((a, b) => direction * collator.compare(value(a), value(b)));
+        body.append(...rows);
+      });
+    });
+    controls.addEventListener("input", filter);
+    controls.hidden = false;
+  </script>
+</body>
+</html>

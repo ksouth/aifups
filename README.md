@@ -6,6 +6,8 @@ Reports AI LLMs are forced to generate whenever they fuck up. Frontier failures 
 
 Browse [reports/](reports/) for the final Markdown collection. It covers failures in evidence review, factual accuracy, tool use, document editing, transparency, and instruction following.
 
+Browse and count the failures on the [failure taxonomy dashboard](https://ksouth.github.io/aifups/).
+
 ### Report index
 
 <!-- REPORT_INDEX_START -->

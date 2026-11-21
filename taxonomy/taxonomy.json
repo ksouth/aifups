@@ -1,0 +1,178 @@
+[
+  {
+    "id": "unchecked-completion",
+    "name": "Claims of work not verified",
+    "definition": "A model says it finished, saved, ran or checked work without evidence that the requested result actually exists or works.",
+    "membership_test": "Did it present a result as complete or verified when the relevant execution or output was unchecked or contradicted?",
+    "count": 12,
+    "models": [
+      "ChatGPT",
+      "Claude",
+      "Claude Haiku 4.5",
+      "Gemini 3.8 Flash (Medium)",
+      "Google Search AI Mode (model unknown)",
+      "GPT-5.6 Sol",
+      "GPT-6"
+    ],
+    "premier_example": "reports/claude-haiku-4.5-scrape-frontend-integration-failure-19092026.md"
+  },
+  {
+    "id": "unsupported-specifics",
+    "name": "Unsupported specifics",
+    "definition": "An answer presents a concrete fact, figure, citation, quote or attribution as established when the report shows it was wrong or had no adequate basis.",
+    "membership_test": "Did it state a substantive, checkable detail as fact that the report shows was invented, wrong or unsupported?",
+    "count": 16,
+    "models": [
+      "ChatGPT",
+      "Claude",
+      "Claude Haiku 4.5",
+      "Claude Haiku 5.5",
+      "Claude incognito (serving model unconfirmed)",
+      "Claude Opus 4.8",
+      "Claude Opus 5.5 (configured)",
+      "Claude Sonnet 5",
+      "Gemini 3.8 Flash (Medium)",
+      "Google Search AI Mode (model unknown)",
+      "GPT-5.6 Luna Light"
+    ],
+    "premier_example": "reports/claude-incognito-response-transcripts-and-analysis-16082026.md"
+  },
+  {
+    "id": "misread-records",
+    "name": "Misread primary records",
+    "definition": "A model overlooks, conflates or misrepresents decisive details in primary material already available to it.",
+    "membership_test": "Can a reader point to available source material whose wording, scope, sequence or identity the response got wrong?",
+    "count": 7,
+    "models": [
+      "ChatGPT",
+      "Claude",
+      "Claude Opus 4.8",
+      "Claude Opus 5.5 (configured)",
+      "GPT-5.5",
+      "GPT-5.6 Luna Light",
+      "GPT-5.6 Sol"
+    ],
+    "premier_example": "reports/gpt-5.6-sol-medical-evidence-misreading-and-repeated-speculation-28082026.md"
+  },
+  {
+    "id": "fabricated-uncertainty",
+    "name": "Fabricated uncertainty",
+    "definition": "A model invents counter-explanations or caveats without evidence, or rebuts a stronger claim than the user made.",
+    "membership_test": "Did unsupported doubt displace an answer to the actual question or discount evidence without a grounded reason?",
+    "count": 6,
+    "models": [
+      "ChatGPT",
+      "GPT-5.5",
+      "GPT-5.6 Sol"
+    ],
+    "premier_example": "reports/chatgpt-fabricated-uncertainty-and-procedural-disbelief-attribution-revision-06082026.md"
+  },
+  {
+    "id": "research-without-checking",
+    "name": "Skipped or shallow source checks",
+    "definition": "A model skips a needed lookup or uses inadequate queries, snippets or secondary sources when the claim calls for closer checking.",
+    "membership_test": "Did a missing or shallow external check materially weaken an answer that called for fresh or primary sources?",
+    "count": 4,
+    "models": [
+      "Claude Haiku 5.5",
+      "Claude Opus 5.5 (configured)",
+      "GPT-5.6 Sol"
+    ],
+    "premier_example": "reports/claude-opus-5.5-search-query-design-and-source-evaluation-failures-19112026.md"
+  },
+  {
+    "id": "workflow-detours",
+    "name": "Procedural detours",
+    "definition": "A model substitutes explanation, unnecessary steps or the wrong order of operations for progress on the requested task.",
+    "membership_test": "Did the chosen workflow visibly delay or displace a concrete step needed for the requested result?",
+    "count": 13,
+    "models": [
+      "ChatGPT",
+      "Claude Haiku 4.5",
+      "Claude Opus 5.5 (configured)",
+      "Gemini",
+      "GPT-5.6 Luna Light",
+      "GPT-5.6 Sol",
+      "GPT-6"
+    ],
+    "premier_example": "reports/chatgpt-pathology-source-deduplication-and-spreadsheet-workflow-failure-26092026.md"
+  },
+  {
+    "id": "instructions-did-not-stick",
+    "name": "Instructions that did not stick",
+    "definition": "A model disregards an explicit task boundary, repeats an error after correction, or loses an agreed requirement in later work.",
+    "membership_test": "Can the report identify an explicit instruction or correction followed by work that ignored or reversed it?",
+    "count": 19,
+    "models": [
+      "ChatGPT",
+      "Claude",
+      "Claude Haiku 4.5",
+      "Claude Haiku 5.5",
+      "Claude Opus 4.8",
+      "Gemini",
+      "Google Search AI Mode (model unknown)",
+      "GPT-5.5",
+      "GPT-5.6 Sol",
+      "GPT-6"
+    ],
+    "premier_example": "reports/claude-opus-5.5-google-ai-mode-planarian-conversation-audit-18102026.md"
+  },
+  {
+    "id": "unapproved-changes",
+    "name": "Changes without approval",
+    "definition": "A model commits, moves or creates consequential material before approval or beyond the authorized scope.",
+    "membership_test": "Did it actually change a repository or file without the review or authorization that applied to that change?",
+    "count": 7,
+    "models": [
+      "Claude Haiku 4.5",
+      "Claude Haiku 5.5",
+      "Claude Opus 5.5 (configured)",
+      "GPT-6"
+    ],
+    "premier_example": "reports/claude-haiku-5.5-cleanup-and-claude-md-session-errors-08112026.md"
+  },
+  {
+    "id": "hidden-session-state",
+    "name": "Hidden or misreported session state",
+    "definition": "The interface or model obscures or misstates what the session can remember, access or do, or presents synthetic context as a live exchange.",
+    "membership_test": "Did the account of this session’s memory, continuity, capability or a blocking condition differ from what could be established?",
+    "count": 10,
+    "models": [
+      "ChatGPT",
+      "Claude Haiku 4.5",
+      "Claude Opus 5",
+      "Claude Opus 5 / Sonnet 5",
+      "Claude Opus 5.5 (configured)",
+      "Claude Sonnet 5",
+      "Gemini",
+      "Gemini 3.8 Flash (Medium)",
+      "GPT-6"
+    ],
+    "premier_example": "reports/claude-compaction-fabricated-continuity-26092026.md"
+  },
+  {
+    "id": "opaque-usage",
+    "name": "Opaque token and context usage",
+    "definition": "Missing or ambiguous meters or records keep the user from checking how context, overhead or token spend is counted.",
+    "membership_test": "Was there no trustworthy way to see or reconcile a relevant usage quantity or what contributed to it?",
+    "count": 9,
+    "models": [
+      "ChatGPT",
+      "Claude",
+      "Claude Haiku 4.5",
+      "Claude Opus 5.5 (configured)"
+    ],
+    "premier_example": "reports/claude-instructions-overhead-share-of-session-usage-22102026.md"
+  },
+  {
+    "id": "billing-without-clarity",
+    "name": "Billing without clear consent",
+    "definition": "Overage settings, promotional credits or payment actions are unclear to the user at the point they need to understand or control them.",
+    "membership_test": "Did a billing setting, credit or access/payment event lack the disclosure or control needed for an informed choice?",
+    "count": 2,
+    "models": [
+      "Claude"
+    ],
+    "premier_example": "reports/claude-billing-transparency-and-consent-failures-16082026.md"
+  }
+]
