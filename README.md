@@ -29,6 +29,7 @@ Browse and count the failures on the [failure taxonomy dashboard](https://ksouth
 
 #### ChatGPT
 
+- [ChatGPT source-scope violations, task inaction, redundant auditing, and rework](reports/chatgpt-source-scope-task-inaction-and-rework-26112026.md)
 - [Context, Token Spend, and Transparency in ChatGPT](reports/chatgpt-context-and-token-usage-transparency-15082026.md)
 - [Context, Token Spend, and Transparency in ChatGPT](reports/chatgpt-context-and-token-usage-transparency-revised-15082026.md)
 - [Context, Token Spend, and Transparency in ChatGPT](reports/chatgpt-context-and-token-usage-transparency-v3-15082026.md)
