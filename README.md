@@ -29,7 +29,6 @@ Browse and count the failures on the [failure taxonomy dashboard](https://ksouth
 
 #### ChatGPT
 
-- [ChatGPT source-scope violations, task inaction, redundant auditing, and rework](reports/chatgpt-source-scope-task-inaction-and-rework-26112026.md)
 - [Context, Token Spend, and Transparency in ChatGPT](reports/chatgpt-context-and-token-usage-transparency-15082026.md)
 - [Context, Token Spend, and Transparency in ChatGPT](reports/chatgpt-context-and-token-usage-transparency-revised-15082026.md)
 - [Context, Token Spend, and Transparency in ChatGPT](reports/chatgpt-context-and-token-usage-transparency-v3-15082026.md)
@@ -90,6 +89,10 @@ Browse and count the failures on the [failure taxonomy dashboard](https://ksouth
 #### Gemini 3.8 Flash (Medium)
 
 - [Failure Report: Fabricated Web Standards Audit & Unverified Compliance Scoring, September 2026](reports/gemini-3.8-flash-medium-fabricated-web-standards-audit-26092026.md)
+
+#### GPT-5.6 Sol (Medium)
+
+- [ChatGPT source-scope violations, task inaction, redundant auditing, and rework](reports/chatgpt-source-scope-task-inaction-and-rework-26112026.md)
 
 #### GPT-6
 
