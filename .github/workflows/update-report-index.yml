@@ -64,6 +64,13 @@ jobs:
                   )
                   if contributor_model:
                       model = contributor_model.group(1).strip().strip("'\"")
+                  if not model:
+                      inline_model = re.search(
+                          r"(?m)^contributors:\s*\[\{.*?\bmodel:\s*['\"]([^'\"]+)['\"]",
+                          text,
+                      )
+                      if inline_model:
+                          model = inline_model.group(1).strip()
 
               # Normalize known families while preserving specific model variants.
               if model and model.lower() not in {"unknown", "chatgpt", "claude", "gemini"}:
